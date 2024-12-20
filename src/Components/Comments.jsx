@@ -16,11 +16,11 @@ const Comments = ({ comments }) => {
     text = text.replace(/<[^>]*>/g, '');
     return text.trim();
   };
-  const [openComments, setOpenComments] = useState(false)
-  const toggleComments = () => {
-    
-    setOpenComments((openComments)=> !openComments)
-  }
+  const [openComments, setOpenComments] = useState({});
+
+  const toggleComments = (id) => {
+    setOpenComments((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
   return (
     <div className=''>
      
@@ -28,20 +28,19 @@ const Comments = ({ comments }) => {
         {status==='succeeded' && 
         <ul>
         {data.map((item) => (
-            <li  className='news'>               
-                <div className='news_info'>
-                <p>{formatText(item.text)}</p> 
-                {item.kids && item.kids.length > 0 && (
-                  
-                    <button onClick={() => toggleComments()}>
-                      {openComments ?  <Comments comments={item.kids} /> : `Show (${item.kids.length})`} 
-                    </button>
-                    
-                 )}
-                </div>
-            </li>
+          <li key={item.id} className='news'>
+            <div className='news_info'>
+              <p>{formatText(item.text)}</p>
+              {item.kids && item.kids.length > 0 && (
+                <button onClick={() => toggleComments(item.id)}>
+                  {openComments[item.id] ? 'Hide Comments' : `Show (${item.kids.length})`}
+                </button>
+              )}
+            </div>
+            {openComments[item.id] && item.kids && <Comments comments={item.kids} />}
+          </li>
         ))}
-    </ul>
+      </ul>
 } 
     </div>
   );
