@@ -4,27 +4,26 @@ import axios from 'axios';
 const headers = {
     'Content-Type': 'application/json',
 };
-
 const config = { headers };
 
 const getNewsInfo = async (id) => {
-    const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${id}.json`, config);
-    return response.data; 
+    const response = await axios.get(import.meta.env.VITE_APP_HACKERNEWS_URL + `item/${id}.json`, config)
+    return response.data
 };
 
 export const fetchGetNewsInfo = createAsyncThunk('newsInfo/fetchGetNewsInfo', async (id) => {
-    const data = await getNewsInfo(id);
-    return data;
+    const data = await getNewsInfo(id)
+    return data
 });
 
 const NewsInfoSlice = createSlice({
     name: 'newsInfo',
-    initialState: {
-        data: null, 
-        status: 'idle', 
-        error: null, 
+    initialState: {},
+    reducers: {
+        clearNewsInfo: (state) => {
+            state.data = []
+        },
     },
-    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(fetchGetNewsInfo.fulfilled, (state, action) => {
@@ -40,5 +39,5 @@ const NewsInfoSlice = createSlice({
             });
     },
 });
-
+export const { clearNewsInfo } = NewsInfoSlice.actions;
 export default NewsInfoSlice.reducer;

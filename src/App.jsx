@@ -3,7 +3,6 @@ import './App.css';
 import MainPage from './Pages/MainPage';
 import NewsPage from './Pages/NewsPage';
 
-
 function App() {
 
   return (

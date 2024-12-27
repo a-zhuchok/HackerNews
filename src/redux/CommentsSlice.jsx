@@ -4,29 +4,44 @@ import axios from 'axios';
 const headers = {
     'Content-Type': 'application/json',
 };
-
 const config = { headers };
 
 const getComment = async (id) => {
-    const response = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`, config);
-    return response.data; 
+    const response = await axios.get(import.meta.env.VITE_APP_HACKERNEWS_URL + `item/${id}.json?print=pretty`, config)
+    return response.data 
 };
-const getComments =async (ids)=>{
-    
-    
-    const comments=[]
-    for(const id of ids){
-        const comment=await getComment(id)
-       
-        comments.push(comment)
+
+const getCommentWithChildren = async (id) => {
+    const comment = await getComment(id);
+    if (comment && !comment.deleted) {
+        if (comment.kids && comment.kids.length > 0) {
+            comment.children = await Promise.all(comment.kids.map(async (kidId) => {
+                const childComment = await getCommentWithChildren(kidId)
+                return childComment 
+            }));
+            comment.children = comment.children.filter(child => child && !child.deleted)
+        } else {
+            comment.children = []
+        }
+        return comment
     }
-    return comments;
-}
+    return null 
+};
+
+const getComments = async (ids) => {
+    const comments = []
+    for (const id of ids) {
+        const comment = await getCommentWithChildren(id)
+        if (comment) { 
+            comments.push(comment)
+        }
+    }
+    return comments
+};
 
 export const fetchGetComments = createAsyncThunk('comments/fetchGetComments', async (ids) => {
-    const data = await getComments(ids); 
-    
-    return data; 
+    const data = await getComments(ids)
+    return data
 });
 
 const CommentsSlice = createSlice({
@@ -45,7 +60,7 @@ const CommentsSlice = createSlice({
             })
             .addCase(fetchGetComments.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message ;
+                state.error = action.error.message;
             });
     },
 });

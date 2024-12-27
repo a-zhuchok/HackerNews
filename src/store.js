@@ -8,6 +8,7 @@ const store = configureStore({
     news: NewsSlice,
     newsInfo: NewsInfoSlice,
     comments: CommentsSlice,
-  }})
+  }
+})
 
 export default store;

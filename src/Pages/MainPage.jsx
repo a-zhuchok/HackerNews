@@ -1,14 +1,13 @@
-import Header from '../Components/Header';
+import HeaderMainPage from '../Components/HeaderMainPage';
 import NewsList from '../Components/NewsList';
 
+const MainPage = () => {
+  return (
+    <>
+      <HeaderMainPage />
+      <NewsList />
+    </>
+  );
+}
 
-const MainPage= () => {
-    return (
-      <>
-      <Header/>
-      <NewsList/>
-      </>
-    );
-  }
-  
-  export default MainPage;
+export default MainPage;
