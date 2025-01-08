@@ -1,2 +1,2 @@
 # News Application
-deploy: https://taupe-basbousa-20581d.netlify.app/
+deploy: https://elaborate-pudding-8e5d8a.netlify.app/
