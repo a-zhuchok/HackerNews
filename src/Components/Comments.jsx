@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGetComments } from '../redux/CommentsSlice';
+import ChildrenComments from './ChildrenComments';
 
 const Comments = ({ comments }) => {
   const dispatch = useDispatch();
@@ -15,26 +16,6 @@ const Comments = ({ comments }) => {
     setOpenComments((prev) => ({ ...prev, [id]: !prev[id] }))
   };
 
-  const ChildrenComments = ({ childrenComments }) => {
-    return (
-      <ul>
-        {childrenComments.map((item) => (
-          <li key={item.id} className='comments_item'>
-            <div className='item_info'>
-              <div className='item_by'>by {item.by}</div>
-              <div dangerouslySetInnerHTML={{ __html: item.text }} />
-            </div>
-            {item.kids && item.kids.length > 0 && (
-              <p className='item_button' onClick={() => toggleComments(item.id)}>
-                {openComments[item.id] ? 'Hide Comments' : `Show Comments(${item.children.length})`}
-              </p>
-            )}
-            {openComments[item.id] && item.kids && <ChildrenComments childrenComments={item.children} />}
-          </li>
-        ))}
-      </ul>
-    )
-  }
   return (
     <div className='comments'>
       {status === 'loading' && <p>Loading...</p>}
@@ -53,7 +34,7 @@ const Comments = ({ comments }) => {
                     {openComments[item.id] ? 'Hide Comments' : `Show Comments (${item.children.length})`}
                   </p>
                 )}
-                {openComments[item.id] && item.kids && <ChildrenComments childrenComments={item.children} />}
+                {openComments[item.id] && item.kids && <ChildrenComments childrenComments={item.children} toggleComments={toggleComments} openComments={openComments} />}
               </li>
             ))}
           </ul>

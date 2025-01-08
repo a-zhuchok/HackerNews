@@ -1,5 +1,5 @@
-import HeaderNewsPage from '../Components/HeaderNewsPage';
-import News from '../Components/News';
+import HeaderNewsPage from '../components/HeaderNewsPage';
+import News from '../components/News';
 
 const NewsPage = () => {
   return (

@@ -1,5 +1,5 @@
-import HeaderMainPage from '../Components/HeaderMainPage';
-import NewsList from '../Components/NewsList';
+import HeaderMainPage from '../components/HeaderMainPage';
+import NewsList from '../components/NewsList';
 
 const MainPage = () => {
   return (
